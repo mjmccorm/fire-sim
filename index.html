@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<title>FireSim</title>
+<!-- jquery : different versions used by diff components -->
+<!-- 		: still testing								 -->
+<script type="text/javascript" src="js/jquery.js"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>-->
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<!-- script for google maps --><script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB1cMw8-YEbFEJHU0Q_aFjggWK1AtsGSX4&amp;sensor=false">
+</script>
+<!-- script for all simulations -->
+<script type="text/javascript" src="js/simulations.js"></script>
+<!-- script for needed to run an animation -->
+<script type="text/javascript" src="js/particle.js"></script>
+<!-- script for animation types default setup -->
+<script type="text/javascript" src="js/effects.js"></script>
+<!-- script for running animations -->
+<script type="text/javascript">
+	var canvases = new Array();
+	var effects_arr = new Array();
+	var flames = new Array();
+	var smokes = new Array();
+	var flame_intervals = new Array();
+	var smoke_intervals = new Array();
+	var fire_details = new Array(); //JSON containing setup information
+	//var my_canvas;
+	//var my_canvas2;
+	
+	function init(){
+		console.log("Initializing animations");
+		console.log("Fires in Simulation:" + currSim.fires.length);
+		for(var i=0; i< currSim.fires.length; i++){
+			//create canvas
+			canvases[i] = document.getElementById('particle_canvas[' + i + ']');
+			effects_arr[i] = effects;
+		}
+		//canvases[0] = document.getElementById('particle_canvas');
+		//canvases[1] = document.getElementById('particle_canvas2');
+		//retrieve fire information from JSON
+		startFire(canvases[0],0,true, true);
+		startFire(canvases[1],1,true, false);	
+	}
+	function getX(fire_id){
+		for(var i=0; i< currSim.fires.length; i++){
+			if(fire_id == currSim.fires[i].fire_id){
+				console.log('returning X: ' + currSim.fires[i].xloc);
+				return parseInt(currSim.fires[i].xloc);
+			}
+		}
+		//console.log('returning X: 0');
+		return 0;
+	}//end of getX
+	function getY(fire_id){
+		for(var i=0; i< currSim.fires.length; i++){
+			if(fire_id == currSim.fires[i].fire_id){
+				console.log('returning Y: ' + currSim.fires[i].yloc);
+				return parseInt(currSim.fires[i].yloc);
+			}
+		}
+		//console.log('returning Y: 0');
+		return 0;
+	}//end of getY
+	/*----------------------------------------------------------------------*/
+	//startFire
+	//	fire_id - a scenario can have multiple fires, integer
+	//	is_smoke - does the fire have smoke, boolean
+	//  is_flames - are flames present, boolean
+	/*----------------------------------------------------------------------*/
+	function startFire(c, fire_id, is_smoke, is_flames){
+		//retrieve simulation number and fire_id from JSON
+		//possibly retrieve canvas and context
+		//setup 
+		console.log('starting fire id:' + fire_id + " at " + getX(fire_id) +',' + getY(fire_id));
+		if(is_smoke){
+			smokes[fire_id] = new ParticleCanvas(c, {x: getX(fire_id), y: getY(fire_id)});
+			//smokes[fire_id].update(effects['smoke']);
+			smokes[fire_id].update(effects_arr[fire_id]['smoke']);
+			smoke_intervals[fire_id] = smokes[fire_id].start(c);
+		}
+		if(is_flames){
+			flames[fire_id] = new ParticleCanvas(c, {x: getX(fire_id), y: getY(fire_id)});
+			//flames[fire_id].update(effects['fire']);
+			flames[fire_id].update(effects_arr[fire_id]['fire']);
+			flame_intervals[fire_id] = flames[fire_id].start(c);
+		}
+	}
+	
+	function extinguishFire(c, fire_id){
+		console.log("extinguishing fire id:" + fire_id);
+		//should figure out how to slowly taper steam to zero
+		if(typeof(flames[fire_id]) !== 'undefined'){
+		console.log('trying to extinguish flame');
+			//flames[fire_id].update(effects['steam']);
+			flames[fire_id].update(effects_arr[fire_id]['steam']);
+			window.setTimeout(function(){	
+				flames[fire_id].stop(c);
+				//clearInterval(flame_intervals[fire_id]); 
+				}, 3000);
+		}
+		//smokes[fire_id].update(effects['steam']);
+		smokes[fire_id].update(effects_arr[fire_id]['steam']);
+		window.setTimeout(function(){	
+			smokes[fire_id].stop(c);
+			//clearInterval(smoke_intervals[fire_id]); 
+			}, 7000);
+	}
+	
+	function darkenSmoke(fire_id){
+		console.log("darkening smoke - fire id: " + fire_id );
+		effects['smoke'].color = "#4D452E";
+		//smokes[fire_id].update(effects['smoke']);
+		smokes[fire_id].update(effects_arr[fire_id]['smoke']);
+		window.setTimeout(function(){
+			//effects['smoke'].color = "#000";
+			effects_arr[fire_id]['smoke'].color = "#000";
+			smokes[fire_id].update(effects['smoke']);
+		}, 3000);
+	}
+	
+	function showFlames(c, fire_id){
+		console.log("showing flames - fire id: " + fire_id );
+		if( typeof(flames[fire_id]) == 'undefined'){
+			flames[fire_id] = new ParticleCanvas(c, {x: 230, y: 140});
+			//flames[fire_id].update(effects['fire']);
+			flames[fire_id].update(effects_arr[fire_id]['fire']);
+			flame_intervals[fire_id] = flames[fire_id].start(c);
+		}else{
+			//flames[fire_id].update(effects['fire']);
+			flames[fire_id].update(effects_arr[fire_id]['fire']);
+		}
+	}
+	
+	function causeExplosion(c, fire_id){
+		console.log("causing explosion - fire id: " + fire_id);
+		//flames[fire_id].update(effects['explosions']);
+		flames[fire_id].update(effects_arr[fire_id]['explosions']);
+		window.setTimeout(function(){	
+			smokes[fire_id].stop(c);
+			flames[fire_id].stop(c);
+			clearInterval(flame_intervals[fire_id]); 
+			clearInterval(smoke_intervals[fire_id]);
+			}, 3000);
+	}
+	
+	function restartSimulation(fire_id){
+		console.log("restarting simulation");
+		//destroy
+		for(var i=0; i < flames.length; i++){
+			flames[i].stop();
+			clearInterval(flame_intervals[i]);
+		}
+		for(var i=0; i < smokes.length; i++){
+			smokes[i].stop();
+			clearInterval(smoke_intervals[i]);
+		}
+		
+		//restore default settings
+		//effects['smoke']['color'] = '#ccc';
+		effects_arr[fire_id]['smoke']['color'] = '#ccc';
+		//reinitialize
+		init();
+	}
+	/* not sure what this is for */
+    $.fn.toJson = function() {
+      var json = {};
+      $.each(this.serializeArray(), function() {
+        json[this.name] = this.value !== null ? this.value : null;
+      });
+      return json;
+    };
+	
+</script>
+
+<!-- script for weather data -->
+<script type='text/javascript'>
+
+	var wind_mph;
+	var wind_gust_mph; //used to determine variance
+	var wind_dir;
+
+	//need to add location parameter
+	function getWeather(){
+	/* Used to get info from WeatherUnderground.com */
+	/*
+	 jQuery(document).ready(function($) { 
+	 $.ajax(
+		{url : "http://api.wunderground.com/api/41b0abf8e556703f/geolookup/conditions/q/MI/Painesdale.json",
+		dataType : "jsonp", 
+		success : function(parsed_json) { 
+			var location = parsed_json['location']['city'];
+			var wind_mph = parsed_json['current_observation']['wind_mph'];
+			var wind_dir = parsed_json['current_observation']['wind_dir'];
+			var temp_f = parsed_json['current_observation']['temp_f'];
+			alert("Current temperature in " + location + " is: " + temp_f + "Wind Speed:" + wind_mph + " Wind Dir:" + wind_dir); 
+			$("#current_temp").text("Temperature: " + temp_f + " F");
+			$("#current_wind_speed").text("Wind Speed: " + wind_mph + " MPH");
+			$("#current_wind_direction").text("Wind Direction: " + wind_dir);
+			} 
+		}); 
+	}); 
+	*/
+	/* Local Testing */
+		$.getJSON('json/Painesdale.json', function(data) {
+		
+			$.each(data.current_observation, function(index, element) {
+				//console.log(index + ' ' +element);
+				switch(index){
+				case('display_location'):
+					$('#weather_data').append($('<div>Location: '+element.full+'</div>'));
+					break;
+				case('temp_f'):
+					$('#weather_data').append($('<div>Temp: '+element+' F</div>'));
+					break;
+				case('wind_string'):
+					$('#weather_data').append($('<div>'+element+'</div>'));
+					break;
+				case('wind_mph'):
+					wind_mph = element;
+					$('#weather_data').append($('<div>Wind Speed: '+element+' MPH</div>'));
+					break;
+				case('wind_gust_mph'):
+					wind_gust_mph = element;
+					$('#weather_data').append($('<div>Wind Gust: '+element+' MPH</div>'));
+					break;
+				case('wind_dir'):
+					wind_dir = element;
+					$('#weather_data').append($('<div>Wind Direction: '+element+'</div>'));
+					break;
+				}
+			});
+				
+		});
+	}//end of getWeather function
+</script>
+ <!-- style for animation -->
+<style type="text/css">@import "css/particle.css";</style>
+<!-- style for page layout -->
+<style type="text/css">
+
+#app-header {background-color: #969696; padding: 10px;}
+#app-title {font-weight: bold; font-size: 32px; margin: 20px; }
+
+#left-col{float: left; width: 60%; }
+#right-col{float: right; width: 40%;}
+#right-col p{padding: 10px;}
+
+#display-image { 
+	display: block;
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	text-align: center;
+	}
+#display-image-img {
+	box-shadow: 5px 1px 5px rgba(0,0,0,0.25);
+}
+#display-caption { 
+	display: block;
+	background-color: #dcdcdc;
+	text-align: center;
+	}
+
+#outline-list{
+	list-style-type: none;
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	}
+#outline-list li img{margin-right: 10px; display:none;}
+#outline{
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	}
+	
+/* Google Maps */
+#map_canvas {
+	display: block;
+	height: 300px;
+	}
+.container{
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+}
+/* Image Lightbox */
+.black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index:1001;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+.white_content {
+	display: none;
+	position: absolute;
+	top: 5%;
+	left: 5%;
+	width: 85%;
+	height: 85%;
+	padding: 16px;
+	border: 10px solid black;
+	background-color: white;
+	z-index:1002;
+	overflow: auto;
+}
+/* Buttons */
+.prev-button {
+	margin: 10px;
+	height: 40px;
+	width: 40px;
+	background-image: url('prev-arrow.png');
+	background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+	}
+.next-button {
+	height: 40px;
+	width: 40px;
+	background-image: url('next-arrow.png');
+	background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+	}
+
+</style>
+<!-- script to run page -->
+<script type="text/javascript">
+    
+	function updatePage(sim){
+		if(sim){
+			$('#simulation-name').text(sim.name);
+			$('#the-map').text(sim.map);
+			
+			//set the weather
+		}
+		return;
+	}
+	
+ 	function updateMap(mp, map){
+		try{
+			var myLatLng = new google.maps.LatLng(mp.lat, mp.lng);
+			map.setCenter(myLatLng);
+		}catch(exception){
+			//console.log(exception);
+		}
+		return;
+	}
+	
+	function updateWeather(){
+	
+	}
+	
+   $(document).ready(function() {
+   
+		/* Menu Control */
+		$("h2").click(function(){
+				$(this).siblings().toggle();
+		});
+   
+		//load first simulation
+		var s = 0;   //increment simulations
+		var im = 0;  //increment images within a sim
+		var ot = 0; //increment outlines within a sim
+		
+		//global currSim to work with Maps
+		currSim = sims.simulations[s];
+		
+		//try to set Map Information
+		try{
+			var myOptions = {
+				center: new google.maps.LatLng(currSim.map[0].lat,currSim.map[0].lng),
+				zoom: 16,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(document.getElementById("map_canvas"),
+				myOptions);
+		}catch(exception){
+		
+			//console.log(exception);
+		}
+		
+		//try to set Weather Information
+		try {
+			getWeather();
+		}catch(exception){
+			//console.log(exception);
+		}
+		
+		updatePage(sims.simulations[s]);
+		
+				$('#prev-sim').click(function(){
+			if(s >= 0){
+				s--;
+				updatePage(sims.simulations[s]);
+				currSim = sims.simulations[s];
+				updateMap(sims.simulations[s].map[0], map);
+				im = 0;
+				ot = 0;
+			}
+		});
+		
+		$('#next-sim').click(function(){
+			if(s < sims.simulations.length){
+				s++;
+				updatePage(sims.simulations[s]);
+				currSim = sims.simulations[s];
+				updateMap(sims.simulations[s].map[0],map);
+				im = 0;
+				ot = 0;
+			
+			}
+		});
+
+			
+	/*  Animation Control */
+	//startFire(0);
+	init();
+	
+    });
+	
+
+ </script>
+</head>
+
+<body>
+<div id="app-header">
+	<table>
+	<tr>
+		<td><img src="adams_township_fire_200x200.png" height="50" width="50" alt="Adams Township Volunteer Fire Department Logo" /></td>
+		<td><span id="app-title">FireSim</span></td>
+		<td>
+		<button id="prev-sim" class="prev-button"></button>
+		<button id="next-sim" class="next-button"></button>
+		</td>
+		<td><span id="simulation-name">Simulation Name</span></td>
+	</tr>
+	</table>
+</div><!--end of app-header -->
+
+
+<div style="clear: both;"></div>
+<div id="left-col">
+	<!--<div id="particle_container" class="container">-->
+	<div class="container">
+		<canvas id="particle_canvas[0]" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
+	</div>
+	
+	<div id="action_container" class="container">
+		<button id="darkenSmoke0" onclick="darkenSmoke(0)" >Darken Smoke</button>
+		<button id="startFire0" onclick="showFlames(canvases[0], 0)" >Show Flames</button>
+		<button id="extinguishFire0" onclick="extinguishFire(canvases[0], 0)" >Extinguish Fire</button>
+		<button id="causeExplosion0" onclick="causeExplosion(canvases[0], 0)" >Cause Explosion</button>
+		<button id="restartSimulation" onclick="restartSimulation(0)" >Restart</button>
+	</div>
+	<div id="dispatch_container" class="container">
+		<h2>Dispatch Information</h2>
+		<div>
+		Dispatch Info goes here
+		</div>
+	</div>
+
+	<div class="container">
+		<canvas id="particle_canvas[1]" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
+	</div>
+</div>
+<div id="right-col">
+	<div id="weather_container" class="container">
+		<h2>Weather</h2>
+		<div id="weather_data">
+	
+		</div>	
+	</div>
+	
+	<div id="resources_container" class="container">
+		<h2>Staff/Resources</h2>
+		<div>
+		Staff Resources Go Here
+		</div>
+	</div>
+	
+	<div id="water_container" class="container">
+		<h2>Water</h2>
+		<div>
+		Water supply, pump settings
+		</div>
+	</div>
+	
+	<div id="map_container" class="container">
+		<h2>Incident Map</h2>
+		<div id="map_canvas"></div>
+	</div>
+</div>
+
+</body>
+</html>

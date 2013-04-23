@@ -1,0 +1,281 @@
+
+{
+	"response": {
+		"version": "0.1"
+		,"termsofService": "http://www.wunderground.com/weather/api/d/terms.html"
+		,"features": {
+		"geolookup": 1
+		,
+		"conditions": 1
+		}
+	}
+		,	"location": {
+		"type":"CITY",
+		"country":"US",
+		"country_iso3166":"US",
+		"country_name":"USA",
+		"state":"MI",
+		"city":"Painesdale",
+		"tz_short":"EDT",
+		"tz_long":"America/New_York",
+		"lat":"47.04313278",
+		"lon":"-88.67169189",
+		"zip":"49955",
+		"magic":"1",
+		"wmo":"99999",
+		"l":"/q/zmw:49955.1.99999",
+		"requesturl":"US/MI/Painesdale.html",
+		"wuiurl":"http://www.wunderground.com/US/MI/Painesdale.html",
+		"nearby_weather_stations": {
+		"airport": {
+		"station": [
+		{ "city":"Houghton", "state":"MI", "country":"US", "icao":"KCMX", "lat":"47.16999817", "lon":"-88.48999786" },
+		{ "city":"Copper Harbor", "state":"MI", "country":"US", "icao":"KP59", "lat":"47.45000076", "lon":"-87.90000153" },
+		{ "city":"Land O' Lakes", "state":"WI", "country":"US", "icao":"KLNL", "lat":"46.15000153", "lon":"-89.20999908" },
+		{ "city":"Gwinn", "state":"MI", "country":"US", "icao":"KSAW", "lat":"46.34999847", "lon":"-87.40000153" }
+		]
+		}
+		,
+		"pws": {
+		"station": [
+		{
+		"neighborhood":"Onnela",
+		"city":"Atlantic Mine",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIATLAN2",
+		"lat":47.131653,
+		"lon":-88.692627,
+		"distance_km":9,
+		"distance_mi":5
+		},
+		{
+		"neighborhood":"Hancock: Sylvan Estates",
+		"city":"Hancock",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIHANCO4",
+		"lat":47.139168,
+		"lon":-88.601112,
+		"distance_km":11,
+		"distance_mi":7
+		},
+		{
+		"neighborhood":"Stanton Twp",
+		"city":"Atlantic Mine",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIATLAN1",
+		"lat":47.163528,
+		"lon":-88.687141,
+		"distance_km":13,
+		"distance_mi":8
+		},
+		{
+		"neighborhood":"",
+		"city":"Dollar Bay",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIDOLLA3",
+		"lat":47.120609,
+		"lon":-88.498154,
+		"distance_km":15,
+		"distance_mi":9
+		},
+		{
+		"neighborhood":"Forsman Road",
+		"city":"Hancock",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIHANCO5",
+		"lat":47.145920,
+		"lon":-88.517128,
+		"distance_km":16,
+		"distance_mi":9
+		},
+		{
+		"neighborhood":"APRSWXNET N KEWEENAW WATERWAY MI US",
+		"city":"Houghton",
+		"state":"MI",
+		"country":"US",
+		"id":"MAU521",
+		"lat":47.192329,
+		"lon":-88.628906,
+		"distance_km":16,
+		"distance_mi":10
+		},
+		{
+		"neighborhood":"",
+		"city":"ELO",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIELO2",
+		"lat":46.865501,
+		"lon":-88.647797,
+		"distance_km":19,
+		"distance_mi":11
+		},
+		{
+		"neighborhood":"BootJack - Torch Lake",
+		"city":"Lake Linden",
+		"state":"MI",
+		"country":"US",
+		"id":"KMILAKEL2",
+		"lat":47.157623,
+		"lon":-88.404579,
+		"distance_km":23,
+		"distance_mi":14
+		},
+		{
+		"neighborhood":"Hubbell",
+		"city":"Hubbell",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIHUBBE2",
+		"lat":47.179073,
+		"lon":-88.426239,
+		"distance_km":23,
+		"distance_mi":14
+		},
+		{
+		"neighborhood":"Rural County Road",
+		"city":"Pelkie",
+		"state":"MI",
+		"country":"US",
+		"id":"KMIPELKI2",
+		"lat":46.822937,
+		"lon":-88.645889,
+		"distance_km":24,
+		"distance_mi":14
+		},
+		{
+		"neighborhood":"RAWS PELKIE MI US",
+		"city":"Pelkie",
+		"state":"MI",
+		"country":"US",
+		"id":"MPIEM4",
+		"lat":46.779701,
+		"lon":-88.663101,
+		"distance_km":29,
+		"distance_mi":17
+		},
+		{
+		"neighborhood":"APRSWXNET Lanse MI US",
+		"city":"L\u0027Anse",
+		"state":"MI",
+		"country":"US",
+		"id":"ME2255",
+		"lat":46.837502,
+		"lon":-88.380501,
+		"distance_km":31,
+		"distance_mi":19
+		},
+		{
+		"neighborhood":"HADS SUPERIOR GRAND TRAVERSE NEAR GAY NWS-GLOS",
+		"city":"Lake Linden",
+		"state":"MI",
+		"country":"US",
+		"id":"MGTRM4",
+		"lat":47.178902,
+		"lon":-88.241699,
+		"distance_km":35,
+		"distance_mi":21
+		},
+		{
+		"neighborhood":"APRSWXNET L Anse MI US",
+		"city":"L\u0027Anse",
+		"state":"MI",
+		"country":"US",
+		"id":"MD2630",
+		"lat":46.746841,
+		"lon":-88.432693,
+		"distance_km":37,
+		"distance_mi":22
+		}
+		]
+		}
+		}
+	}
+		,	"current_observation": {
+		"image": {
+		"url":"http://icons-ak.wxug.com/graphics/wu2/logo_130x80.png",
+		"title":"Weather Underground",
+		"link":"http://www.wunderground.com"
+		},
+		"display_location": {
+		"full":"Painesdale, MI",
+		"city":"Painesdale",
+		"state":"MI",
+		"state_name":"Michigan",
+		"country":"US",
+		"country_iso3166":"US",
+		"zip":"49955",
+		"latitude":"47.04313278",
+		"longitude":"-88.67169189",
+		"elevation":"396.00000000"
+		},
+		"observation_location": {
+		"full":"Onnela, Atlantic Mine, Michigan",
+		"city":"Onnela, Atlantic Mine",
+		"state":"Michigan",
+		"country":"US",
+		"country_iso3166":"US",
+		"latitude":"47.131653",
+		"longitude":"-88.692627",
+		"elevation":"900 ft"
+		},
+		"estimated": {
+		},
+		"station_id":"KMIATLAN2",
+		"observation_time":"Last Updated on April 19, 10:10 PM EDT",
+		"observation_time_rfc822":"Fri, 19 Apr 2013 22:10:25 -0400",
+		"observation_epoch":"1366423825",
+		"local_time_rfc822":"Fri, 19 Apr 2013 22:14:00 -0400",
+		"local_epoch":"1366424040",
+		"local_tz_short":"EDT",
+		"local_tz_long":"America/New_York",
+		"local_tz_offset":"-0400",
+		"weather":"Light Snow",
+		"temperature_string":"22.0 F (-5.6 C)",
+		"temp_f":22.0,
+		"temp_c":-5.6,
+		"relative_humidity":"82%",
+		"wind_string":"From the NNW at 5.0 MPH Gusting to 15.0 MPH",
+		"wind_dir":"NNW",
+		"wind_degrees":338,
+		"wind_mph":5.0,
+		"wind_gust_mph":"15.0",
+		"wind_kph":8.0,
+		"wind_gust_kph":"24.1",
+		"pressure_mb":"1006",
+		"pressure_in":"29.72",
+		"pressure_trend":"-",
+		"dewpoint_string":"17 F (-8 C)",
+		"dewpoint_f":17,
+		"dewpoint_c":-8,
+		"heat_index_string":"NA",
+		"heat_index_f":"NA",
+		"heat_index_c":"NA",
+		"windchill_string":"15 F (-9 C)",
+		"windchill_f":"15",
+		"windchill_c":"-9",
+		"feelslike_string":"15 F (-9 C)",
+		"feelslike_f":"15",
+		"feelslike_c":"-9",
+		"visibility_mi":"1.0",
+		"visibility_km":"1.6",
+		"solarradiation":"0",
+		"UV":"0",
+		"precip_1hr_string":"0.00 in ( 0 mm)",
+		"precip_1hr_in":"0.00",
+		"precip_1hr_metric":" 0",
+		"precip_today_string":"0.00 in (0 mm)",
+		"precip_today_in":"0.00",
+		"precip_today_metric":"0",
+		"icon":"snow",
+		"icon_url":"http://icons-ak.wxug.com/i/c/k/nt_snow.gif",
+		"forecast_url":"http://www.wunderground.com/US/MI/Painesdale.html",
+		"history_url":"http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=KMIATLAN2",
+		"ob_url":"http://www.wunderground.com/cgi-bin/findweather/getForecast?query=47.131653,-88.692627"
+	}
+}
