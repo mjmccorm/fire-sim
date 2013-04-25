@@ -239,12 +239,12 @@
 <style type="text/css">@import "css/particle.css";</style>
 <!-- style for page layout -->
 <style type="text/css">
-
+body { min-width: 1300px; }
 #app-header {background-color: #969696; padding: 10px;}
 #app-title {font-weight: bold; font-size: 32px; margin: 20px; }
 
-#left-col{float: left; width: 60%; }
-#right-col{float: right; width: 40%;}
+#left-col{float: left; min-width: 890px; }
+#right-col{float: right; width: 40%; min-width: 375px;}
 #right-col p{padding: 10px;}
 
 #display-image { 
@@ -455,6 +455,8 @@
 	<!--<div id="particle_container" class="container">-->
 	<div class="container">
 		<canvas id="particle_canvas[0]" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
+		
+		<img src="images/navigation.png" alt="navigation" />
 	</div>
 	
 	<div id="action_container" class="container">
