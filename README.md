@@ -14,4 +14,4 @@ HTML5 Canvas for Animation,
 JQuery to manipulate page elements,
 JSON to store simulation data,
 JSON to store weather information from Wunderground.com,
-Google Maps API to display location and/or street view,
+Google Maps API to display location and/or street view.
