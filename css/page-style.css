@@ -1,0 +1,94 @@
+body { min-width: 1300px; }
+#app-header {background-color: #969696; padding: 10px;}
+#app-title {font-weight: bold; font-size: 32px; margin: 20px; }
+
+#left-col{float: left; min-width: 890px; }
+#right-col{float: right; width: 40%; min-width: 375px;}
+#right-col p{padding: 10px;}
+
+#display-image { 
+	display: block;
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	text-align: center;
+	}
+#display-image-img {
+	box-shadow: 5px 1px 5px rgba(0,0,0,0.25);
+}
+#display-caption { 
+	display: block;
+	background-color: #dcdcdc;
+	text-align: center;
+	}
+
+#outline-list{
+	list-style-type: none;
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	}
+#outline-list li img{margin-right: 10px; display:none;}
+#outline{
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+	}
+	
+/* Google Maps */
+#map_canvas {
+	display: block;
+	height: 300px;
+	}
+.container{
+	margin: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+}
+/* Image Lightbox */
+.black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index:1001;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+.white_content {
+	display: none;
+	position: absolute;
+	top: 5%;
+	left: 5%;
+	width: 85%;
+	height: 85%;
+	padding: 16px;
+	border: 10px solid black;
+	background-color: white;
+	z-index:1002;
+	overflow: auto;
+}
+/* Buttons */
+.prev-button {
+	margin: 10px;
+	height: 40px;
+	width: 40px;
+	background-image: url('prev-arrow.png');
+	background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+	}
+.next-button {
+	height: 40px;
+	width: 40px;
+	background-image: url('next-arrow.png');
+	background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+	}

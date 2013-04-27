@@ -11,8 +11,8 @@ var sims = {
 				},
 				{
 				"fire_id":"1",
-				"xloc":"330",
-				"yloc":"200"
+				"xloc":"430",
+				"yloc":"240"
 				}
 				],
 			"images": [

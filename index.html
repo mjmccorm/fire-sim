@@ -1,344 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>FireSim</title>
-<!-- jquery : different versions used by diff components -->
-<!-- 		: still testing								 -->
-<script type="text/javascript" src="js/jquery.js"></script>
-<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>-->
-<script type="text/javascript" src="js/jquery-ui.js"></script>
-<!-- script for google maps --><script type="text/javascript"
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<title>Fire Simulator</title>  
+	<script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB1cMw8-YEbFEJHU0Q_aFjggWK1AtsGSX4&amp;sensor=false">
-</script>
-<!-- script for all simulations -->
-<script type="text/javascript" src="js/simulations.js"></script>
-<!-- script for needed to run an animation -->
-<script type="text/javascript" src="js/particle.js"></script>
-<!-- script for animation types default setup -->
-<script type="text/javascript" src="js/effects.js"></script>
-<!-- script for running animations -->
-<script type="text/javascript">
+	</script>
+	<script type="text/javascript" src="js/particle.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/simulations.js"></script>
+	<script type="text/javascript" src="js/weather.js"></script>
+	<script type="text/javascript">
+    /* -------------------------------------------------- 
+	* Variables
+	*  -------------------------------------------------- */
 	var canvases = new Array();
-	var effects_arr = new Array();
-	var flames = new Array();
-	var smokes = new Array();
-	var flame_intervals = new Array();
-	var smoke_intervals = new Array();
-	var fire_details = new Array(); //JSON containing setup information
-	//var my_canvas;
-	//var my_canvas2;
+    var particles;
+    var particles_test = new Array();     
+    var particles_effects = new Array();
 	
-	function init(){
-		console.log("Initializing animations");
-		console.log("Fires in Simulation:" + currSim.fires.length);
-		for(var i=0; i< currSim.fires.length; i++){
-			//create canvas
-			canvases[i] = document.getElementById('particle_canvas[' + i + ']');
-			effects_arr[i] = effects;
-		}
-		//canvases[0] = document.getElementById('particle_canvas');
-		//canvases[1] = document.getElementById('particle_canvas2');
-		//retrieve fire information from JSON
-		startFire(canvases[0],0,true, true);
-		startFire(canvases[1],1,true, false);	
-	}
-	function getX(fire_id){
-		for(var i=0; i< currSim.fires.length; i++){
-			if(fire_id == currSim.fires[i].fire_id){
-				console.log('returning X: ' + currSim.fires[i].xloc);
-				return parseInt(currSim.fires[i].xloc);
-			}
-		}
-		//console.log('returning X: 0');
-		return 0;
-	}//end of getX
-	function getY(fire_id){
-		for(var i=0; i< currSim.fires.length; i++){
-			if(fire_id == currSim.fires[i].fire_id){
-				console.log('returning Y: ' + currSim.fires[i].yloc);
-				return parseInt(currSim.fires[i].yloc);
-			}
-		}
-		//console.log('returning Y: 0');
-		return 0;
-	}//end of getY
-	/*----------------------------------------------------------------------*/
-	//startFire
-	//	fire_id - a scenario can have multiple fires, integer
-	//	is_smoke - does the fire have smoke, boolean
-	//  is_flames - are flames present, boolean
-	/*----------------------------------------------------------------------*/
-	function startFire(c, fire_id, is_smoke, is_flames){
-		//retrieve simulation number and fire_id from JSON
-		//possibly retrieve canvas and context
-		//setup 
-		console.log('starting fire id:' + fire_id + " at " + getX(fire_id) +',' + getY(fire_id));
-		if(is_smoke){
-			smokes[fire_id] = new ParticleCanvas(c, {x: getX(fire_id), y: getY(fire_id)});
-			//smokes[fire_id].update(effects['smoke']);
-			smokes[fire_id].update(effects_arr[fire_id]['smoke']);
-			smoke_intervals[fire_id] = smokes[fire_id].start(c);
-		}
-		if(is_flames){
-			flames[fire_id] = new ParticleCanvas(c, {x: getX(fire_id), y: getY(fire_id)});
-			//flames[fire_id].update(effects['fire']);
-			flames[fire_id].update(effects_arr[fire_id]['fire']);
-			flame_intervals[fire_id] = flames[fire_id].start(c);
-		}
-	}
+	var fires = new Array();
 	
-	function extinguishFire(c, fire_id){
-		console.log("extinguishing fire id:" + fire_id);
-		//should figure out how to slowly taper steam to zero
-		if(typeof(flames[fire_id]) !== 'undefined'){
-		console.log('trying to extinguish flame');
-			//flames[fire_id].update(effects['steam']);
-			flames[fire_id].update(effects_arr[fire_id]['steam']);
-			window.setTimeout(function(){	
-				flames[fire_id].stop(c);
-				//clearInterval(flame_intervals[fire_id]); 
-				}, 3000);
-		}
-		//smokes[fire_id].update(effects['steam']);
-		smokes[fire_id].update(effects_arr[fire_id]['steam']);
-		window.setTimeout(function(){	
-			smokes[fire_id].stop(c);
-			//clearInterval(smoke_intervals[fire_id]); 
-			}, 7000);
-	}
+	//load first simulation
+	var s = 0;   //increment simulations
+	var im = 0;  //increment images within a sim
+	var ot = 0; //increment outlines within a sim
 	
-	function darkenSmoke(fire_id){
-		console.log("darkening smoke - fire id: " + fire_id );
-		effects['smoke'].color = "#4D452E";
-		//smokes[fire_id].update(effects['smoke']);
-		smokes[fire_id].update(effects_arr[fire_id]['smoke']);
-		window.setTimeout(function(){
-			//effects['smoke'].color = "#000";
-			effects_arr[fire_id]['smoke'].color = "#000";
-			smokes[fire_id].update(effects['smoke']);
-		}, 3000);
-	}
+	//global currSim to work with Maps
+	currSim = sims.simulations[s];
 	
-	function showFlames(c, fire_id){
-		console.log("showing flames - fire id: " + fire_id );
-		if( typeof(flames[fire_id]) == 'undefined'){
-			flames[fire_id] = new ParticleCanvas(c, {x: 230, y: 140});
-			//flames[fire_id].update(effects['fire']);
-			flames[fire_id].update(effects_arr[fire_id]['fire']);
-			flame_intervals[fire_id] = flames[fire_id].start(c);
-		}else{
-			//flames[fire_id].update(effects['fire']);
-			flames[fire_id].update(effects_arr[fire_id]['fire']);
-		}
-	}
-	
-	function causeExplosion(c, fire_id){
-		console.log("causing explosion - fire id: " + fire_id);
-		//flames[fire_id].update(effects['explosions']);
-		flames[fire_id].update(effects_arr[fire_id]['explosions']);
-		window.setTimeout(function(){	
-			smokes[fire_id].stop(c);
-			flames[fire_id].stop(c);
-			clearInterval(flame_intervals[fire_id]); 
-			clearInterval(smoke_intervals[fire_id]);
-			}, 3000);
-	}
-	
-	function restartSimulation(fire_id){
-		console.log("restarting simulation");
-		//destroy
-		for(var i=0; i < flames.length; i++){
-			flames[i].stop();
-			clearInterval(flame_intervals[i]);
-		}
-		for(var i=0; i < smokes.length; i++){
-			smokes[i].stop();
-			clearInterval(smoke_intervals[i]);
-		}
-		
-		//restore default settings
-		//effects['smoke']['color'] = '#ccc';
-		effects_arr[fire_id]['smoke']['color'] = '#ccc';
-		//reinitialize
-		init();
-	}
-	/* not sure what this is for */
-    $.fn.toJson = function() {
-      var json = {};
-      $.each(this.serializeArray(), function() {
-        json[this.name] = this.value !== null ? this.value : null;
-      });
-      return json;
-    };
-	
-</script>
 
-<!-- script for weather data -->
-<script type='text/javascript'>
-
-	var wind_mph;
-	var wind_gust_mph; //used to determine variance
-	var wind_dir;
-
-	//need to add location parameter
-	function getWeather(){
-	/* Used to get info from WeatherUnderground.com */
-	/*
-	 jQuery(document).ready(function($) { 
-	 $.ajax(
-		{url : "http://api.wunderground.com/api/41b0abf8e556703f/geolookup/conditions/q/MI/Painesdale.json",
-		dataType : "jsonp", 
-		success : function(parsed_json) { 
-			var location = parsed_json['location']['city'];
-			var wind_mph = parsed_json['current_observation']['wind_mph'];
-			var wind_dir = parsed_json['current_observation']['wind_dir'];
-			var temp_f = parsed_json['current_observation']['temp_f'];
-			alert("Current temperature in " + location + " is: " + temp_f + "Wind Speed:" + wind_mph + " Wind Dir:" + wind_dir); 
-			$("#current_temp").text("Temperature: " + temp_f + " F");
-			$("#current_wind_speed").text("Wind Speed: " + wind_mph + " MPH");
-			$("#current_wind_direction").text("Wind Direction: " + wind_dir);
-			} 
-		}); 
-	}); 
-	*/
-	/* Local Testing */
-		$.getJSON('json/Painesdale.json', function(data) {
-		
-			$.each(data.current_observation, function(index, element) {
-				//console.log(index + ' ' +element);
-				switch(index){
-				case('display_location'):
-					$('#weather_data').append($('<div>Location: '+element.full+'</div>'));
-					break;
-				case('temp_f'):
-					$('#weather_data').append($('<div>Temp: '+element+' F</div>'));
-					break;
-				case('wind_string'):
-					$('#weather_data').append($('<div>'+element+'</div>'));
-					break;
-				case('wind_mph'):
-					wind_mph = element;
-					$('#weather_data').append($('<div>Wind Speed: '+element+' MPH</div>'));
-					break;
-				case('wind_gust_mph'):
-					wind_gust_mph = element;
-					$('#weather_data').append($('<div>Wind Gust: '+element+' MPH</div>'));
-					break;
-				case('wind_dir'):
-					wind_dir = element;
-					$('#weather_data').append($('<div>Wind Direction: '+element+'</div>'));
-					break;
-				}
-			});
-				
-		});
-	}//end of getWeather function
-</script>
- <!-- style for animation -->
-<style type="text/css">@import "css/particle.css";</style>
-<!-- style for page layout -->
-<style type="text/css">
-body { min-width: 1300px; }
-#app-header {background-color: #969696; padding: 10px;}
-#app-title {font-weight: bold; font-size: 32px; margin: 20px; }
-
-#left-col{float: left; min-width: 890px; }
-#right-col{float: right; width: 40%; min-width: 375px;}
-#right-col p{padding: 10px;}
-
-#display-image { 
-	display: block;
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	text-align: center;
-	}
-#display-image-img {
-	box-shadow: 5px 1px 5px rgba(0,0,0,0.25);
-}
-#display-caption { 
-	display: block;
-	background-color: #dcdcdc;
-	text-align: center;
-	}
-
-#outline-list{
-	list-style-type: none;
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	}
-#outline-list li img{margin-right: 10px; display:none;}
-#outline{
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	}
-	
-/* Google Maps */
-#map_canvas {
-	display: block;
-	height: 300px;
-	}
-.container{
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-}
-/* Image Lightbox */
-.black_overlay{
-	display: none;
-	position: absolute;
-	top: 0%;
-	left: 0%;
-	width: 100%;
-	height: 100%;
-	background-color: black;
-	z-index:1001;
-	-moz-opacity: 0.8;
-	opacity:.80;
-	filter: alpha(opacity=80);
-}
-.white_content {
-	display: none;
-	position: absolute;
-	top: 5%;
-	left: 5%;
-	width: 85%;
-	height: 85%;
-	padding: 16px;
-	border: 10px solid black;
-	background-color: white;
-	z-index:1002;
-	overflow: auto;
-}
-/* Buttons */
-.prev-button {
-	margin: 10px;
-	height: 40px;
-	width: 40px;
-	background-image: url('prev-arrow.png');
-	background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-	}
-.next-button {
-	height: 40px;
-	width: 40px;
-	background-image: url('next-arrow.png');
-	background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-	}
-
-</style>
-<!-- script to run page -->
-<script type="text/javascript">
-    
-	function updatePage(sim){
+	/* -------------------------------------------------- 
+	* Page Control
+	*  -------------------------------------------------- */
+		function updatePage(sim){
 		if(sim){
 			$('#simulation-name').text(sim.name);
 			$('#the-map').text(sim.map);
@@ -362,21 +58,63 @@ body { min-width: 1300px; }
 	
 	}
 	
-   $(document).ready(function() {
-   
-		/* Menu Control */
-		$("h2").click(function(){
-				$(this).siblings().toggle();
-		});
-   
-		//load first simulation
-		var s = 0;   //increment simulations
-		var im = 0;  //increment images within a sim
-		var ot = 0; //increment outlines within a sim
-		
-		//global currSim to work with Maps
-		currSim = sims.simulations[s];
-		
+	/* Menu Control */
+	$("h2").click(function(){
+			$(this).siblings().toggle();
+	});
+	
+	/* -------------------------------------------------- 
+	* Particle functions
+	*  -------------------------------------------------- */
+	$.fn.toJson = function() {
+      var json = {};
+      $.each(this.serializeArray(), function() {
+        json[this.name] = this.value !== null ? this.value : null;
+      });
+      return json;
+    };
+	
+    $.fn.inputSlider = function(options) {
+      var inputs = $(this), slider = $('<div/>');
+      
+      // Update slider control on input change
+      inputs.bind('keyup change', function() {
+        $(this).closest('label').find('.ui-slider').slider('value', this.value);
+      });
+      
+      var options = $.extend({
+        slide: function(e, ui) {
+          $(ui.handle).closest('label').find('input').val(ui.value).change();
+        }
+      }, options);
+      
+      slider.insertAfter(inputs)
+      .slider(options);
+      
+      return this;            
+    };
+    
+	/*
+    function loadPreset(val) {
+      var obj;  
+      if((obj = effects[val])) {
+        particles.update(obj);
+        for(var i in obj) {
+          var value = (obj[i] instanceof Vector) ? -obj[i].y : obj[i];
+          $(':input[name=' + i + ']').val(value);
+        }
+        $('input').change();
+      }
+    }
+    */
+	
+	/* -------------------------------------------------- 
+	* Initial Page Load
+	*  -------------------------------------------------- */
+    $(document).ready(function() {
+	
+
+	
 		//try to set Map Information
 		try{
 			var myOptions = {
@@ -399,8 +137,8 @@ body { min-width: 1300px; }
 		}
 		
 		updatePage(sims.simulations[s]);
-		
-				$('#prev-sim').click(function(){
+	
+		$('#prev-sim').click(function(){
 			if(s >= 0){
 				s--;
 				updatePage(sims.simulations[s]);
@@ -422,19 +160,320 @@ body { min-width: 1300px; }
 			
 			}
 		});
+		
+        canvases[0] = document.getElementById('particle_canvas');
+		
+		//console.log("Simulations: " +sims.simulations.length);
+		//var currSim = sims.simulations[0];
+		//console.log(currSim.toSource());
+		for (var i in currSim.fires){
+			console.log("ID,X,Y:" + currSim.fires[i].fire_id + "," + currSim.fires[i].xloc + "," + currSim.fires[i].yloc);
+			fires[i] = startFire(currSim.fires[i].fire_id, currSim.fires[i]);
+		}
 
+		function startFire(id, details){
+		
+			//read fire detail from JSON (details)
 			
-	/*  Animation Control */
-	//startFire(0);
-	init();
-	
-    });
-	
+			//flames
+			var f = new ParticleCanvas(canvases[0], {x: parseInt(details.xloc), y: parseInt(details.yloc)});
+			var fe = jQuery.extend(true, {}, effects['fire']);
+			f.update(fe);
+			f.start();
+			
+			//smoke
+			var s = new ParticleCanvas(canvases[0], {x: parseInt(details.xloc), y: parseInt(details.yloc)});
+			var se = jQuery.extend(true, {}, effects['smoke']);
+			s.update(se);
+			s.start();
+			
+			return {flame: f, smoke: s};
+			
+		}//end startFire
+		
+		particles = fires[0].flame;
+		console.log("--------------------------------");
+		//console.log(particles.toSource());
+		
+		$('#controls :input').change(function() {
+			//particles.update($('#controls :input').toJson());
+			console.log($('#controls :input').toJson().toSource());
+		});
+      
+		 //$('select').change(function() { loadPreset(this.value); });
+		  
+		 $('#x-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 20,
+			value: 20
+		 });
+		  
+		 $('#y-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 20,
+			value: 5
+		 });
+		  
+		 $('#direction').inputSlider({
+			range: 'min',
+			min: -180,
+			max: 180,
+			value: 0
+		 });
+		  
+		 $('#direction-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 180,
+			value: 15
+		 });
+		  
+		 $('#velocity').inputSlider({
+			step: 0.01,
+			range: 'min',
+			min: 0,
+			max: 10,
+			value: 3
+		 });
+		  
+		 $('#size').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 50,
+			value: 10
+		 });
+		  
+		 $('#size-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 50,
+			value: 5
+		 });
+		  
+		 $('#spawn-speed').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 100,
+			value: 25
+		 });
+		  
+		 $('#max-particles').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 1000,
+			value: 500
+		 });
+		  
+		 $('#life').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 200,
+			value: 30
+		 });
+		  
+		 $('#life-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 200,
+			value: 10
+		 });
 
- </script>
+      
+    }); //end of document.ready
+	
+	var effects = { 
+    
+      smoke: {
+		id: 0,
+        shape: 'circle',
+        velocity: new Vector({y: -0.35}),
+        xVariance: 10,
+        yVariance: 15,
+        spawnSpeed: 1,
+        generations: 100000,
+        maxParticles: 5000,
+        size: 16,
+        sizeVariance: 10,
+        life: 350,
+        lifeVariance: 50,    
+        direction: 0,
+        directionVariance: 25,
+        color: '#ccc',
+        opacity: 1,
+        onDraw: function(p) {
+          p.opacity = 0.251 - (p.age / p.life) * 0.25;
+        }
+      },
+
+      steam: {
+		id: 0,
+        shape: 'circle',
+        velocity: new Vector({y: -0.35}),
+        xVariance: 10,
+        yVariance: 15,
+        spawnSpeed: 1,
+        generations: 100000,
+        maxParticles: 5000,
+        size: 16,
+        sizeVariance: 10,
+        life: 350,
+        lifeVariance: 50,    
+        direction: 0,
+        directionVariance: 25,
+        color: '#fff',
+        opacity: 1,
+        onDraw: function(p) {
+          p.opacity = 0.251 - (p.age / p.life) * 0.25;
+        }
+      },
+      
+      explosions: {
+		id: 0,
+        shape: 'square',
+        velocity: new Vector({y: -1}),
+        xVariance: 5,
+        yVariance: 5,
+        spawnSpeed: 20,
+        generations: 100000,
+        maxParticles: 200,
+        size: 2,
+        sizeVariance: 0.5,
+        life: 250,
+        lifeVariance: 0,    
+        direction: 0,
+        directionVariance: 180,
+        color: '#fff',
+        opacity: 1,
+        onDraw: function() {}  
+      },
+      
+      fountain: {
+	    id: 0,
+        shape: 'circle',
+        velocity: new Vector({x: 0, y: -5}),
+        xVariance: 0,
+        yVariance: 0,
+        spawnSpeed: 5,
+        generations: 100000,
+        maxParticles: 500,
+        size: 8,
+        sizeVariance: 6,
+        life: 100,
+        lifeVariance: 0,    
+        direction: 0,
+        directionVariance: 15,
+        color: '#cef',
+        opacity: 1,
+        onDraw: function(p) {
+          p.v.add(new Vector({y: 0.1}));
+          p.opacity = 1 - (p.age / p.life * 0.9);
+        }
+      },
+
+      hazmat: {
+	    id: 0,
+        shape: 'circle',
+        velocity: new Vector({x: 0, y: -1.49}),
+        xVariance: 0,
+        yVariance: 0,
+        spawnSpeed: 5,
+        generations: 100000,
+        maxParticles: 500,
+        size: 8,
+        sizeVariance: 6,
+        life: 100,
+        lifeVariance: 0,    
+        direction: 0,
+        directionVariance: 15,
+        color: '#7EB314',
+        opacity: 1,
+        onDraw: function(p) {
+          p.v.add(new Vector({y: 0.1}));
+          p.opacity = 1 - (p.age / p.life * 0.9);
+        }
+      },
+      
+      fire: {
+	    id: 0,
+        shape: 'circle',
+        velocity: new Vector({y: -3}),
+        xVariance: 20,
+        yVariance: 5,
+        spawnSpeed: 25,
+        generations: 100000,
+        maxParticles: 500,
+        size: 20,
+        sizeVariance: 10,
+        life: 30,
+        lifeVariance: 10,    
+        direction: 0,
+        directionVariance: 15,
+        color: '#cef',
+        opacity: 1,
+        onDraw: function(p) {
+          var y = -this.age * 3;
+          p.size *= 0.98;
+          p.color = 'rgb(255, ' + (y + 255) + ', 68)';
+          p.opacity = 0.5 - (p.age / p.life * 0.4);
+        }
+      },
+      
+      raindrops: {
+	    id: 0,
+        shape: 'circle',
+        velocity: new Vector({y: 0}),
+        xVariance: 200,
+        yVariance: 200,
+        spawnSpeed: 1,
+        generations: 100000,
+        maxParticles: 100,
+        size: 20,
+        sizeVariance: 10,
+        life: 50,
+        lifeVariance: 10,    
+        direction: 0,
+        directionVariance: 15,
+        color: '#cef',
+        opacity: 1,
+        onDraw: function(p) {
+          p.size *= 0.98;
+          p.opacity = 0.5 - (p.age / p.life * 0.4);
+        }
+      },
+
+      snow: {
+	    id: 0,
+        shape: 'circle',
+        velocity: new Vector({y: 0}),
+        xVariance: 200,
+        yVariance: 200,
+        spawnSpeed: 1,
+        generations: 100000,
+        maxParticles: 100,
+        size: 20,
+        sizeVariance: 10,
+        life: 50,
+        lifeVariance: 10,    
+        direction: 0,
+        directionVariance: 15,
+        color: '#fff',
+        opacity: 1,
+        onDraw: function(p) {
+          p.size *= 0.98;
+          p.opacity = 0.5 - (p.age / p.life * 0.4);
+        }
+      }
+      
+	};
+  </script>
+  
+
+  <style type="text/css">@import "css/particle.css";</style>
+  <style type="text/css">@import "css/page-style.css";</style>
 </head>
 
-<body>
 <div id="app-header">
 	<table>
 	<tr>
@@ -451,10 +490,11 @@ body { min-width: 1300px; }
 
 
 <div style="clear: both;"></div>
-<div id="left-col">
+<div id="left-col">
+
 	<!--<div id="particle_container" class="container">-->
 	<div class="container">
-		<canvas id="particle_canvas[0]" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
+		<canvas id="particle_canvas" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
 		
 		<img src="images/navigation.png" alt="navigation" />
 	</div>
@@ -473,10 +513,8 @@ body { min-width: 1300px; }
 		</div>
 	</div>
 
-	<div class="container">
-		<canvas id="particle_canvas[1]" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
-	</div>
-</div>
+</div>
+
 <div id="right-col">
 	<div id="weather_container" class="container">
 		<h2>Weather</h2>
@@ -502,8 +540,10 @@ body { min-width: 1300px; }
 	<div id="map_container" class="container">
 		<h2>Incident Map</h2>
 		<div id="map_canvas"></div>
-	</div>
+	</div>
+
 </div>
 
 </body>
-</html>
+</html>
+

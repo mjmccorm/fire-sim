@@ -2,7 +2,7 @@
  * Reset Defaults
  ----------------------------------------------------------------------------*/
     
-dd, div, dl, dt, fieldset, form,h3, h4, h5, h6, li, ol, p, ul {
+body, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, li, ol, p, ul, img {
   margin: 0;
   border: none;
   padding: 0;
@@ -10,11 +10,20 @@ dd, div, dl, dt, fieldset, form,h3, h4, h5, h6, li, ol, p, ul {
 }
 
 body {
+  font-size: 10px;
   font-family: "Trebuchet MS";
 }
-    
-.particle_canvas {	
+
+.container canvas {
   background: url('../images/house.jpg') no-repeat;
+}
+#particle_container {
+  margin-left: 300px;
+  width: 700px;
+  //background: #fff;
+  background: url('../images/house.jpg') no-repeat;
+  overflow: hidden;
+  position: relative;
 }
 
 #controls {
@@ -23,7 +32,7 @@ body {
   -webkit-border-radius: 5px;
   float: left;
   width: 250px;
-  height: 460px;
+  height: 560px;
   background: url('w35.png');
   background-color: #000;
   margin: 10px;

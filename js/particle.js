@@ -125,8 +125,13 @@ ParticleGenerator.prototype = {
     
   particles: [],
   
-  init:  function() {
-	this.particles = [];
+  //for testing
+  particleGeneratorID: 0,
+  
+  test: function(){
+	console.log('Particle Length:'+ this.particles.length);
+	console.log('Particle Options:' + this.particles.options);
+		
   },
     
   update: function() {
@@ -235,8 +240,7 @@ function ParticleCanvas(canvas, pos) {
   pos = extend({x: this.width/2, y: this.height/2}, pos);
   
   this.particleGenerator = new ParticleGenerator({position: new Vector(pos)});
-  this.particleGenerator.init();
-  
+
   return this;
 };
 
@@ -247,7 +251,7 @@ ParticleCanvas.prototype = {
     var self = this;
     return setInterval(function() { self.tick(); }, 1000/60);
   },
-  
+    
   // Initialize the canvas per frame
   init: function() {
     var ctx = this.ctx;
@@ -261,14 +265,6 @@ ParticleCanvas.prototype = {
     ctx.stroke();
     ctx.save();
   },
-  
-  //FireSim modification
-  stop: function(canvas) {
-	var ctx = canvas.getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.save();
-	return;
-   },
   
   update: function(options) {    
     
@@ -290,6 +286,10 @@ ParticleCanvas.prototype = {
     
     this.particleGenerator.update(this.ctx);
     this.particleGenerator.draw(this.ctx);
-  }
+  },
+  
+     
     
 };
+
+ 
