@@ -34,11 +34,12 @@
 	/* -------------------------------------------------- 
 	* Page Control
 	*  -------------------------------------------------- */
-		function updatePage(sim){
+	function updatePage(sim){
 		if(sim){
 			$('#simulation-name').text(sim.name);
 			$('#the-map').text(sim.map);
-			
+			console.log(currSim.images.toSource());
+			$('.container canvas').css('background', "#fff url(images/" + currSim.images[0].imageSrc + ") no-repeat");
 			//set the weather
 		}
 		return;
@@ -112,9 +113,12 @@
 	* Initial Page Load
 	*  -------------------------------------------------- */
     $(document).ready(function() {
-	
 
-	
+		/* Menu Control */
+		$("h2").click(function(){
+				$(this).siblings().toggle();
+		});
+		
 		//try to set Map Information
 		try{
 			var myOptions = {
@@ -137,29 +141,6 @@
 		}
 		
 		updatePage(sims.simulations[s]);
-	
-		$('#prev-sim').click(function(){
-			if(s >= 0){
-				s--;
-				updatePage(sims.simulations[s]);
-				currSim = sims.simulations[s];
-				updateMap(sims.simulations[s].map[0], map);
-				im = 0;
-				ot = 0;
-			}
-		});
-		
-		$('#next-sim').click(function(){
-			if(s < sims.simulations.length){
-				s++;
-				updatePage(sims.simulations[s]);
-				currSim = sims.simulations[s];
-				updateMap(sims.simulations[s].map[0],map);
-				im = 0;
-				ot = 0;
-			
-			}
-		});
 		
         canvases[0] = document.getElementById('particle_canvas');
 		

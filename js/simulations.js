@@ -7,7 +7,7 @@ var sims = {
 				{
 				"fire_id":"0",
 				"xloc":"230",
-				"yloc":"140"
+				"yloc":"140",
 				},
 				{
 				"fire_id":"1",
@@ -17,16 +17,8 @@ var sims = {
 				],
 			"images": [
 				{
-				"imageSrc":"simulations/image1.jpg",
+				"imageSrc":"house.jpg",
 				"caption":"front of house"
-				},
-				{
-				"imageSrc":"simulations/image2.jpg",
-				"caption":"side of house"
-				},
-				{
-				"imageSrc":"simulations/image3.jpg",
-				"caption":"rear of house"
 				}
 				],
 			"map": [
