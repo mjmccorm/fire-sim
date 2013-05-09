@@ -14,12 +14,13 @@ body {
   //font-family: "Trebuchet MS";
 }
 
+
 /*
 #particle_container {
   margin-left: 300px;
   width: 700px;
   //background: #fff;
-  background: url('../images/house.jpg') no-repeat;
+  //background: url('../images/house.jpg') no-repeat;
   overflow: hidden;
   position: relative;
 }
@@ -31,7 +32,7 @@ body {
   -webkit-border-radius: 5px;
   float: left;
   width: 250px;
-  height: 560px;
+  //height: 560px;
   background: url('w35.png');
   background-color: #000;
   margin: 10px;

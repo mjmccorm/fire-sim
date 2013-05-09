@@ -3,24 +3,40 @@ var sims = {
 			{
 			"name": "Simulation 1",
 			"dispatch":"Adams Township Fire...report of a structure fire on Highland St.  There are 2 subjects entrapped.",
-			"fires": [
-				{
-				"fire_id":"0",
-				"xloc":"230",
-				"yloc":"140",
-				},
-				{
-				"fire_id":"1",
-				"xloc":"430",
-				"yloc":"240"
-				}
-				],
-			"images": [
-				{
-				"imageSrc":"house.jpg",
-				"caption":"front of house"
-				}
-				],
+			"views":[
+					{
+					"view_id":"north",
+					"view_image":"sim0_north.jpg",
+					"fires": [
+						{
+						"fire_id":"0",
+						"xloc":"280",
+						"yloc":"300",
+						},
+						{
+						"fire_id":"1",
+						"xloc":"430",
+						"yloc":"240"
+						}
+						]
+					},
+					{
+					"view_id":"south",
+					"view_image":"sim0_south.jpg",
+					"fires": [
+						{
+						"fire_id":"0",
+						"xloc":"130",
+						"yloc":"50",
+						},
+						{
+						"fire_id":"1",
+						"xloc":"230",
+						"yloc":"240"
+						}
+					]
+					}
+			],
 			"map": [
 				{
 				"lat":"47.04197",
@@ -48,27 +64,30 @@ var sims = {
 			{
 			"name": "Simulation 2",
 			"dispatch":"Adams Township Fire...report of a car fire on Erickson Drive, Atlantic Mine.  No entrapment.",
-			"fires": [
-				{
-				"fire_id":"0",
-				"xloc":"230",
-				"yloc":"140"
-				}
-				],	
-
-			"images": [
-				{
-				"imageSrc":"simulations/image4.png",
-				"caption":"front of car"
-				},
-				{
-				"imageSrc":"simulations/image5.png",
-				"caption":"side of car"
-				},
-				{
-				"imageSrc":"simulations/image6.png",
-				"caption":"rear of car"
-				}],
+			"views": [
+					{
+					"view_id":"east",
+					"view_image":"sim0_east.jpg",
+					"fires": [
+						{
+						"fire_id":"0",
+						"xloc":"230",
+						"yloc":"140",
+						}
+						]
+					},
+					{
+					"view_id":"south",
+					"view_image":"sim0_south.jpg",
+					"fires": [
+						{
+						"fire_id":"0",
+						"xloc":"130",
+						"yloc":"140",
+						}
+						]
+					}
+			],
 			"map": [
 				{
 				"lat":"47.09804",

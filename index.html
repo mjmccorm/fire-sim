@@ -24,11 +24,10 @@
 	
 	//load first simulation
 	var s = 0;   //increment simulations
-	var im = 0;  //increment images within a sim
-	var ot = 0; //increment outlines within a sim
-	
+	var v = 0;   //increment view
 	//global currSim to work with Maps
 	currSim = sims.simulations[s];
+	currView = currSim.views[v];
 	
 
 	/* -------------------------------------------------- 
@@ -38,8 +37,8 @@
 		if(sim){
 			$('#simulation-name').text(sim.name);
 			$('#the-map').text(sim.map);
-			console.log(currSim.images.toSource());
-			$('.container canvas').css('background', "#fff url(images/" + currSim.images[0].imageSrc + ") no-repeat");
+			console.log("View_image: " + currView.view_image);
+			$('#bg_canvas').attr('src', "images/" + currView.view_image);
 			//set the weather
 		}
 		return;
@@ -54,6 +53,55 @@
 		}
 		return;
 	}
+	
+	function nextSim(){
+		console.log('next sim');
+		if (s < sims.simulations.length){
+			s++;
+			currSim = sims.simulations[s];
+			currView = currSim.views[v];
+			updatePage(sims.simulations[s]);
+			
+		}
+	}
+	function prevSim(){
+		console.log('prev sim');
+		if (s > 0 && sims.simulations.length > 0){
+			s--;
+			currSim = sims.simulations[s];
+			currView = currSim.views[v];
+			updatePage(sims.simulations[s]);
+			fires = [];
+			for (var i in currView.fires){
+				console.log("ID,X,Y:" + currView.fires[i].fire_id + "," + currView.fires[i].xloc + "," + currView.fires[i].yloc);
+				fires[i] = startFire(currView.fires[i].fire_id, currView.fires[i]);
+			}
+		}
+	}
+	
+	function nextView(){
+		console.log('next view');
+		if (v < currSim.views.length){
+			v++;
+			currView = currSim.views[v];
+			updatePage(sims.simulations[s]);
+			fires = [];
+			for (var i in currView.fires){
+				console.log("ID,X,Y:" + currView.fires[i].fire_id + "," + currView.fires[i].xloc + "," + currView.fires[i].yloc);
+				fires[i] = startFire(currView.fires[i].fire_id, currView.fires[i]);
+			}
+		}
+	}
+	
+	function prevView(){
+		console.log('prev view');
+		if (v > 0 && currSim.views.length > 0){
+			v--;
+			currView = currSim.views[v];
+			updatePage(sims.simulations[s]);
+		}
+	}
+	
 	
 	function updateWeather(){
 	
@@ -147,9 +195,9 @@
 		//console.log("Simulations: " +sims.simulations.length);
 		//var currSim = sims.simulations[0];
 		//console.log(currSim.toSource());
-		for (var i in currSim.fires){
-			console.log("ID,X,Y:" + currSim.fires[i].fire_id + "," + currSim.fires[i].xloc + "," + currSim.fires[i].yloc);
-			fires[i] = startFire(currSim.fires[i].fire_id, currSim.fires[i]);
+		for (var i in currView.fires){
+			console.log("ID,X,Y:" + currView.fires[i].fire_id + "," + currView.fires[i].xloc + "," + currView.fires[i].yloc);
+			fires[i] = startFire(currView.fires[i].fire_id, currView.fires[i]);
 		}
 
 		function startFire(id, details){
@@ -172,7 +220,10 @@
 			
 		}//end startFire
 		
-		particles = fires[0].flame;
+	
+		//particles = fires[0].flame;
+		//localStorage.particles = fires[0].flame;
+		localStorage.particles = fires[0].flame.toSource();
 		console.log("--------------------------------");
 		//console.log(particles.toSource());
 		
@@ -461,8 +512,8 @@
 		<td><img src="images/adams_township_fire_200x200.png" height="50" width="50" alt="Adams Township Volunteer Fire Department Logo" /></td>
 		<td><span id="app-title">FireSim</span></td>
 		<td>
-		<button id="prev-sim" class="prev-button"></button>
-		<button id="next-sim" class="next-button"></button>
+		<button id="prev-sim" class="prev-button" onclick="prevSim()"></button>
+		<button id="next-sim" class="next-button" onclick="nextSim()"></button>
 		</td>
 		<td><span id="simulation-name">Simulation Name</span></td>
 	</tr>
@@ -470,17 +521,24 @@
 </div><!--end of app-header -->
 
 
-<div style="clear: both;"></div>
 <div id="left-col">
 
 	<!--<div id="particle_container" class="container">-->
-	<div class="container">
-		<canvas id="particle_canvas" class="particle_canvas" height="500" width="700">Your browser lacks canvas support.</canvas>  
-		
+	<div id="navigation">
 		<img src="images/navigation.png" alt="navigation" />
+	</div>
+	<div>
+		<img id="bg_canvas" class="" height="525" width="700" style="position: absolute; z-index: 0;" src="images/house.jpg" />
+		<canvas id="particle_canvas" class="particle_canvas" height="525" width="700" style="position: absolute;  z-index: 1;">Your browser lacks canvas support.</canvas>  
+
+	</div>
+	<div id="action_navigation">
+		<button id="prev-view" class="prev-button" onclick="prevView()"></button>
+		<button id="next-view" class="next-button" onclick="nextView()"></button>
 	</div>
 	
 	<div id="action_container" class="container">
+		
 		<button id="darkenSmoke0" onclick="darkenSmoke(0)" >Darken Smoke</button>
 		<button id="startFire0" onclick="showFlames(canvases[0], 0)" >Show Flames</button>
 		<button id="extinguishFire0" onclick="extinguishFire(canvases[0], 0)" >Extinguish Fire</button>

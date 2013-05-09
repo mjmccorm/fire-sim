@@ -4,10 +4,143 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 	<title>Fire Simulator</title>  
 	<style type="text/css">@import "css/particle.css";</style>
-	<style type="text/css">@import "css/page-style.css";</style>
+	<!--<style type="text/css">@import "css/page-style.css";</style>-->
+	<script type="text/javascript" src="js/particle.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript">
+	
+	/* -------------------------------------------------- 
+	* Particle functions
+	*  -------------------------------------------------- */
+	$.fn.toJson = function() {
+      var json = {};
+      $.each(this.serializeArray(), function() {
+        json[this.name] = this.value !== null ? this.value : null;
+      });
+      return json;
+    };
+	
+    $.fn.inputSlider = function(options) {
+      var inputs = $(this), slider = $('<div/>');
+      
+      // Update slider control on input change
+      inputs.bind('keyup change', function() {
+        $(this).closest('label').find('.ui-slider').slider('value', this.value);
+      });
+      
+      var options = $.extend({
+        slide: function(e, ui) {
+          $(ui.handle).closest('label').find('input').val(ui.value).change();
+        }
+      }, options);
+      
+      slider.insertAfter(inputs)
+      .slider(options);
+      
+      return this;            
+    };
+	
+	
+	$(document).ready(function(){
+	
+		$('#diagnostics').text(localStorage.particles);
+		
+				$('#controls :input').change(function() {
+				//localStorage.particles.update($('#controls :input').toJson())
+		});
+      
+		 //$('select').change(function() { loadPreset(this.value); });
+		  
+		 $('#x-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 20,
+			value: 20
+		 });
+		  
+		 $('#y-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 20,
+			value: 5
+		 });
+		  
+		 $('#direction').inputSlider({
+			range: 'min',
+			min: -180,
+			max: 180,
+			value: 0
+		 });
+		  
+		 $('#direction-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 180,
+			value: 15
+		 });
+		  
+		 $('#velocity').inputSlider({
+			step: 0.01,
+			range: 'min',
+			min: 0,
+			max: 10,
+			value: 3
+		 });
+		  
+		 $('#size').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 50,
+			value: 10
+		 });
+		  
+		 $('#size-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 50,
+			value: 5
+		 });
+		  
+		 $('#spawn-speed').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 100,
+			value: 25
+		 });
+		  
+		 $('#max-particles').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 1000,
+			value: 500
+		 });
+		  
+		 $('#life').inputSlider({
+			range: 'min',
+			min: 1,
+			max: 200,
+			value: 30
+		 });
+		  
+		 $('#life-variance').inputSlider({
+			range: 'min',
+			min: 0,
+			max: 200,
+			value: 10
+		 });
+
+    	
+	});
+	
+	</script>
 </head>
 <body>	
-div id="controls">
+<div id="diagnostics">
+
+</div>
+
+<div id="controls">
       <ul>
         <li>
           <div class="half">

@@ -1,50 +1,27 @@
-body { min-width: 1300px; }
 #app-header {background-color: #969696; padding: 10px;}
 #app-title {font-weight: bold; font-size: 32px; margin: 20px; }
 
-#left-col{float: left; min-width: 890px; }
-#right-col{float: right; width: 40%; min-width: 375px;}
-#right-col p{padding: 10px;}
+#left-col{ position:absolute; top: 90px; left: 0px; height: 600px; width: 1024px; background-color: green; }
+#right-col{ position:absolute; top: 90px; left: 1024px; 600px; width: 300px; background-color: red; }
 
-#display-image { 
-	display: block;
+#action_navigation {position:absolute; top: 600px; left: 0px; }
+#action_container {position: absolute; top: 690px; left; 0px; }
+#dispatch_container {position: absolute; top: 710px; left; 0px; }
+#navigation {position: absolute; top: 20px; z-index: 2; }
+.container{
 	margin: 10px;
 	padding: 10px;
 	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	text-align: center;
-	}
-#display-image-img {
-	box-shadow: 5px 1px 5px rgba(0,0,0,0.25);
 }
-#display-caption { 
-	display: block;
-	background-color: #dcdcdc;
-	text-align: center;
-	}
 
-#outline-list{
-	list-style-type: none;
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	}
-#outline-list li img{margin-right: 10px; display:none;}
-#outline{
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-	}
+
 	
 /* Google Maps */
 #map_canvas {
 	display: block;
 	height: 300px;
 	}
-.container{
-	margin: 10px;
-	padding: 10px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-}
+
 /* Image Lightbox */
 .black_overlay{
 	display: none;
@@ -77,7 +54,7 @@ body { min-width: 1300px; }
 	margin: 10px;
 	height: 40px;
 	width: 40px;
-	background-image: url('prev-arrow.png');
+	background-image: url('../images/prev-arrow.png');
 	background-color: transparent;
     background-repeat: no-repeat;
     border: none;
@@ -86,7 +63,7 @@ body { min-width: 1300px; }
 .next-button {
 	height: 40px;
 	width: 40px;
-	background-image: url('next-arrow.png');
+	background-image: url('../images/next-arrow.png');
 	background-color: transparent;
     background-repeat: no-repeat;
     border: none;
