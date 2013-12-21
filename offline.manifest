@@ -1,0 +1,12 @@
+CACHE MANIFEST
+
+FALLBACK:
+./offline.html /
+
+NETWORK:
+*
+
+CACHE:
+./offline.html
+./json/EsriCanberra.json
+./js/geo5.js

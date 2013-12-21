@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html manifest="./offline.manifest">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Taking HTML5 Maps OFFLINE with Geo5.org</title>
+</head>
+    <body>
+        <div id="map" 
+            style="width: 100%;height: 640px;margin: 0;padding: 0;border: 0;" 
+            data-geo-type="offlinemap" 
+            data-geo-basemap="None" 
+            data-geo-centre="-35.30938198903829,149.1339111328125" 
+            data-geo-zoom=13>
+        </div>
+        
+        <a data-geo-type="json-tilecache" 
+            href="json/EsriCanberra.json" 
+            data-geo-layer-src='http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png' 
+            data-geo-map="map">
+            <strong>8MB</strong> JSON Tilecache file for ESRI Canberra Office
+            </a>
+        <p>This map should cache a large block of tiles to the AppCache <em>AS WELL AS</em> caching any additional tiles as you browse.  IndexedDB storage plus appcache.manifest techniques ensure that you can take the map offline and even refresh when disconnected</p>
+        <script type="text/javascript" src="js/geo5.js"></script>
+    </body>
+</html>

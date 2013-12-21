@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+   <head>
+      <title>Bing Map Test</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	  <script type="text/javascript" src="js/kinetic-v4.5.4.min.js"></script>
+      <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+      <script type="text/javascript">
+      var map = null;
+            
+      function getMap()
+      {
+	  
+		//location of fire
+		var fireLocation = new Microsoft.Maps.Location(47.04182, -88.67224); 
+		
+		map = new Microsoft.Maps.Map(document.getElementById('myMap'), {credentials: 'AgSRebHURscqiiPxQgcIUHyrwy9IBvUzD5Y_zGyUfweJL9FNV6IrNEsq5AptaY42', center: fireLocation, zoom: 15});
+		
+		//fire marker
+		var fireLocationMarker = new Microsoft.Maps.Pushpin(fireLocation, null); 
+        map.entities.push(fireLocationMarker);
+		
+		
+      }   
+      </script>
+	  <style type="text/css">
+			#myMap {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			z-index: 1;
+			height: 700px;
+			width: 100%;
+			}
+			
+			#container{
+			position: absolute;
+			top: 50px;
+			left: 0px;
+			//opacity:0.4;
+			//background-color: #ffcc00;
+			z-index: 2000;
+			}
+
+	  </style>
+   </head>
+   <body onload="getMap();">
+		<div id="container"></div>
+		<div id='myMap'></div>
+	  
+		<script defer="defer">
+			var stage = new Kinetic.Stage({
+			container: 'container',
+			width: 1000,
+			height: 600
+			});
+
+			var layer = new Kinetic.Layer();
+
+			var station1 = new Kinetic.Rect({
+			x: 0,
+			y: 0,
+			width: 150,
+			height: 300,
+			fill: 'white',
+			stroke: 'black',
+			strokeWidth: 2
+			});
+
+			var station2 = new Kinetic.Rect({
+			x: 0,
+			y: 315,
+			width: 150,
+			height: 125,
+			fill: 'white',
+			stroke: 'black',
+			strokeWidth: 2
+			});
+
+			var tanker1 = new Kinetic.Rect({
+			x: 25,
+			y: 10,
+			width: 100,
+			height: 50,
+			fill: 'grey',
+			stroke: 'black',
+			strokeWidth: 4,
+			draggable: true
+			});
+			
+			var engine1 = new Kinetic.Rect({
+			x: 25,
+			y: 70,
+			width: 100,
+			height: 50,
+			fill: 'red',
+			stroke: 'black',
+			strokeWidth: 4,
+			draggable: true
+			});
+			
+			var van1 = new Kinetic.Rect({
+			x: 45,
+			y: 250,
+			width: 50,
+			height: 35,
+			fill: 'red',
+			stroke: 'black',
+			strokeWidth: 4,
+			draggable: true
+			});
+			
+			var engine2 = new Kinetic.Rect({
+			x: 25,
+			y: 325,
+			width: 100,
+			height: 50,
+			fill: 'red',
+			stroke: 'black',
+			strokeWidth: 4,
+			draggable: true
+			});
+			
+			var engine3 = new Kinetic.Rect({
+			x: 25,
+			y: 385,
+			width: 100,
+			height: 50,
+			fill: 'red',
+			stroke: 'black',
+			strokeWidth: 4,
+			draggable: true
+			});
+			
+
+      // add the shape to the layer
+	  layer.add(station1);
+      layer.add(station2);
+
+	  layer.add(tanker1);
+	  layer.add(engine1);
+	  layer.add(van1);
+	  layer.add(engine2);
+	  layer.add(engine3);
+      // add the layer to the stage
+      stage.add(layer);
+    </script>
+	  
+   </body>
+</html>
+      

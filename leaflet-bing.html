@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Leaflet - Bing Maps</title>
+	<script src="js/leaflet.js"></script>
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="./css/leaflet.ie.css" />
+	<![endif]-->
+ 
+	<style type="text/css">
+		#map { height: 600px; width: 99%;}
+	</style>
+	
+</head>
+    <body>
+		<h1>Leaflet Test</h1>
+		<div id="map"></div>
+		<script type="text/javascript">
+
+		var map = L.map('map').setView([47.04182, -88.67224], 13);
+
+		//
+		//FireSim Cloudmade API-KEY is 90b8ee983f845e6a1f8497ab68be8d5
+		//
+		var bingRoad = new L.BingLayer("AgSRebHURscqiiPxQgcIUHyrwy9IBvUzD5Y_zGyUfweJL9FNV6IrNEsq5AptaY42", {type: "Road", maxZoom: 19, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker-pro/inc/img/error-tile-image.png", detectRetina: true});
+		bingRoad.addTo(map);
+
+
+		/*
+		L.marker([51.5, -0.09]).addTo(map)
+			.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+		*/
+		
+		L.circle([47.04182, -88.67224], 500, {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5
+		}).addTo(map).bindPopup("I am a circle.");
+
+		/*
+		L.polygon([
+			[51.509, -0.08],
+			[51.503, -0.06],
+			[51.51, -0.047]
+		]).addTo(map).bindPopup("I am a polygon.");
+		*/
+
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(map);
+		}
+
+		map.on('click', onMapClick);
+
+	</script>
+        
+        
+    </body>
+</html>
